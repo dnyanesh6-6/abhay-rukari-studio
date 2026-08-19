@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WorkCreativesCategoryRouteImport } from './routes/work.creatives.$category'
+import { Route as WorkVideosCategoryRouteImport } from './routes/work.videos.$category'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkCreativesCategoryRoute = WorkCreativesCategoryRouteImport.update({
+  id: '/work/creatives/$category',
+  path: '/work/creatives/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkVideosCategoryRoute = WorkVideosCategoryRouteImport.update({
+  id: '/work/videos/$category',
+  path: '/work/videos/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/work/creatives/$category': typeof WorkCreativesCategoryRoute
+  '/work/videos/$category': typeof WorkVideosCategoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/work/creatives/$category': typeof WorkCreativesCategoryRoute
+  '/work/videos/$category': typeof WorkVideosCategoryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/work/creatives/$category': typeof WorkCreativesCategoryRoute
+  '/work/videos/$category': typeof WorkVideosCategoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/work/creatives/$category' | '/work/videos/$category'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/work/creatives/$category' | '/work/videos/$category'
+  id: '__root__' | '/' | '/work/creatives/$category' | '/work/videos/$category'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  WorkCreativesCategoryRoute: typeof WorkCreativesCategoryRoute
+  WorkVideosCategoryRoute: typeof WorkVideosCategoryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/work/creatives/$category': {
+      id: '/work/creatives/$category'
+      path: '/work/creatives/$category'
+      fullPath: '/work/creatives/$category'
+      preLoaderRoute: typeof WorkCreativesCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work/videos/$category': {
+      id: '/work/videos/$category'
+      path: '/work/videos/$category'
+      fullPath: '/work/videos/$category'
+      preLoaderRoute: typeof WorkVideosCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  WorkCreativesCategoryRoute: WorkCreativesCategoryRoute,
+  WorkVideosCategoryRoute: WorkVideosCategoryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
