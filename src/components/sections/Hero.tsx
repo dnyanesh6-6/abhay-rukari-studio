@@ -93,27 +93,28 @@ export function Hero({ start = true }: { start?: boolean }) {
         </div>
 
         {/* PORTRAIT — replace by setting `identity.portrait` in src/data/portfolio.ts */}
-        <div className="soft-in relative mx-auto w-full max-w-sm" style={delay(0.45)}>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border">
-            {identity.portrait ? (
-              <img
-                src={identity.portrait}
-                alt={`Portrait of ${identity.name}`}
-                className="size-full object-cover"
-                loading="eager"
-              />
-            ) : (
-              <PlaceholderVisual label="ADD YOUR PORTRAIT — identity.portrait" seed={3} />
-            )}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, color-mix(in oklab, var(--background) 85%, transparent), transparent 55%)",
-              }}
-            />
-          </div>
+       <div
+         className="soft-in relative mx-auto w-full max-w-sm"
+         style={delay(0.45)}
+       >
+         <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-border">
+           <img
+             src="/portfolio/Image.png"
+             alt={`Portrait of ${identity.name}`}
+             className="size-full object-cover"
+             loading="eager"
+           />
+
+           <div
+             aria-hidden="true"
+             className="pointer-events-none absolute inset-0"
+             style={{
+               background:
+                 "linear-gradient(to top, color-mix(in oklab, var(--background) 85%, transparent), transparent 55%)",
+             }}
+           />
+         </div>
+
         </div>
       </div>
     </section>

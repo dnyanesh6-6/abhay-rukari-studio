@@ -6,23 +6,62 @@ export function About() {
   const { ref, shown } = useReveal<HTMLDivElement>();
 
   return (
-    <section id="about" className="relative bg-background">
-      <div ref={ref} className={cn("section-shell reveal", shown && "reveal-in")}>
+    <section
+      id="about"
+      className="relative overflow-hidden bg-background"
+    >
+      {/* Orange ambient glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
+        style={{
+          background: `
+            radial-gradient(
+              ellipse 80% 60% at 50% 0%,
+              rgba(246, 95, 8, 0.18) 0%,
+              rgba(246, 95, 8, 0.08) 35%,
+              transparent 75%
+            )
+          `,
+        }}
+      />
+
+      {/* Additional subtle orange glow on the right */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-40 top-20 h-[400px] w-[400px] rounded-full opacity-30 blur-3xl"
+        style={{
+          background: "rgba(246, 95, 8, 0.18)",
+        }}
+      />
+
+      <div
+        ref={ref}
+        className={cn(
+          "section-shell relative z-10 reveal",
+          shown && "reveal-in",
+        )}
+      >
         <p className="eyebrow">01 — ABOUT ME</p>
 
         <h2 className="font-display mt-6 max-w-4xl text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.05] font-semibold">
-          {identity.title.split(" & ")[0]} <span className="text-accent">&</span>{" "}
+          {identity.title.split(" & ")[0]}{" "}
+          <span className="text-accent">&</span>{" "}
           {identity.title.split(" & ")[1]}
         </h2>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_0.8fr]">
           <div className="space-y-6 text-sm leading-relaxed text-muted-foreground md:text-base">
-            <p className="text-foreground/90">{identity.summary}</p>
+            <p className="text-foreground/90">
+              {identity.summary}
+            </p>
+
             <p>{identity.intro}</p>
           </div>
 
           <div>
             <p className="eyebrow">CAPABILITIES</p>
+
             <ul className="mt-5 flex flex-wrap gap-2">
               {capabilities.map((c) => (
                 <li
@@ -33,14 +72,24 @@ export function About() {
                 </li>
               ))}
             </ul>
+
             <div className="mt-10 flex gap-10">
               <div>
-                <p className="font-display text-4xl text-accent">{identity.experienceYears}</p>
-                <p className="eyebrow mt-1">YEARS EXPERIENCE</p>
+                <p className="font-display text-4xl text-accent">
+                  {identity.experienceYears}
+                </p>
+
+                <p className="eyebrow mt-1">
+                  YEARS EXPERIENCE
+                </p>
               </div>
+
               <div>
                 <p className="font-display text-4xl">02</p>
-                <p className="eyebrow mt-1">CRAFT DISCIPLINES</p>
+
+                <p className="eyebrow mt-1">
+                  CRAFT DISCIPLINES
+                </p>
               </div>
             </div>
           </div>
