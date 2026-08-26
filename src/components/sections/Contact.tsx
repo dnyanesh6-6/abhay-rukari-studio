@@ -69,10 +69,10 @@ export function Contact() {
           </div>
 
           {/* SOCIAL ICONS */}
-          <div>
+          <div className="lg:col-start-1">
             <p className="eyebrow">SOCIAL</p>
 
-            <div className="mt-5 flex items-center gap-4">
+  <div className="mt-5 flex items-center justify-start gap-4">
               {/* Instagram + LinkedIn */}
               {socials.map((s) => (
                 <a

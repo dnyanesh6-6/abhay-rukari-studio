@@ -23,13 +23,12 @@ export function ExperienceSection() {
               className="
                 group
                 relative
-                min-h-[280px]
+                min-h-[380px]
                 overflow-hidden
                 rounded-2xl
                 border
                 border-border
                 bg-background
-                p-6
                 transition-all
                 duration-500
                 ease-[cubic-bezier(0.16,1,0.3,1)]
@@ -37,25 +36,42 @@ export function ExperienceSection() {
                 hover:border-accent/60
                 hover:bg-accent/10
                 hover:shadow-2xl
-                md:p-8
               "
             >
-              {/* Background hover effect */}
+              {/* BACKGROUND HOVER EFFECT */}
               <div
                 className="
                   pointer-events-none
                   absolute
                   inset-0
+                  bg-[radial-gradient(circle_at_top_right,rgba(255,94,0,0.18),transparent_55%)]
                   opacity-0
                   transition-opacity
                   duration-500
                   group-hover:opacity-100
-                  bg-[radial-gradient(circle_at_top_right,rgba(255,94,0,0.18),transparent_55%)]
                 "
               />
 
-              <div className="relative flex h-full min-h-[216px] flex-col justify-between">
-                {/* Top */}
+              {/* NORMAL CARD CONTENT */}
+              <div
+                className="
+                  absolute
+                  inset-0
+                  z-10
+                  flex
+                  min-h-full
+                  flex-col
+                  justify-between
+                  p-6
+                  transition-all
+                  duration-500
+                  ease-[cubic-bezier(0.16,1,0.3,1)]
+                  group-hover:-translate-y-5
+                  group-hover:opacity-0
+                  md:p-8
+                "
+              >
+                {/* TOP */}
                 <div className="flex items-start justify-between gap-4">
                   <span className="eyebrow">
                     EXPERIENCE
@@ -69,8 +85,8 @@ export function ExperienceSection() {
                   )}
                 </div>
 
-                {/* Main content */}
-                <div className="mt-10">
+                {/* MAIN */}
+                <div className="mt-auto">
                   <h3
                     className="
                       font-display
@@ -89,26 +105,70 @@ export function ExperienceSection() {
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                     {exp.role}
                   </p>
+
+                  {/* BOTTOM */}
+                  <div className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-5">
+                    <span className="eyebrow">
+                      {exp.period}
+                    </span>
+
+                    <span
+                      className="
+                        text-xl
+                        text-muted-foreground
+                        transition-all
+                        duration-300
+                        group-hover:translate-x-1
+                        group-hover:text-accent
+                      "
+                    >
+                      ↗
+                    </span>
+                  </div>
                 </div>
+              </div>
 
-                {/* Bottom */}
-                <div className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-5">
-                  <span className="eyebrow">
-                    {exp.period}
-                  </span>
+              {/* HOVER CONTENT */}
+              <div
+                className="
+                  absolute
+                  inset-0
+                  z-20
+                  flex
+                  translate-y-5
+                  flex-col
+                  justify-center
+                  p-6
+                  opacity-0
+                  transition-all
+                  duration-500
+                  ease-[cubic-bezier(0.16,1,0.3,1)]
+                  group-hover:translate-y-0
+                  group-hover:opacity-100
+                  md:p-8
+                "
+              >
+                <p className="eyebrow text-accent">
+                  {exp.company}
+                </p>
 
-                  <span
-                    className="
-                      text-xl
-                      text-muted-foreground
-                      transition-all
-                      duration-300
-                      group-hover:translate-x-1
-                      group-hover:text-accent
-                    "
-                  >
-                    ↗
-                  </span>
+                <h3 className="font-display mt-3 text-xl leading-tight md:text-2xl">
+                  {exp.role}
+                </h3>
+
+                <p className="eyebrow mt-3">
+                  {exp.period}
+                </p>
+
+                <div className="mt-7 space-y-3">
+                  {exp.description.map((item, index) => (
+                    <p
+                      key={index}
+                      className="text-sm leading-relaxed text-muted-foreground"
+                    >
+                      {item}
+                    </p>
+                  ))}
                 </div>
               </div>
             </article>

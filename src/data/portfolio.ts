@@ -31,7 +31,6 @@ export const identity = {
     "I create visual experiences through design, video, and motion—combining creativity with purpose to turn ideas into impactful stories.",
   summary:
     "Graphic Designer and Video Editor with 3+ years of experience in visual design, branding, marketing creatives, social media, motion graphics, and video. Skilled in developing creative concepts from ideation to final execution, with strong knowledge of typography, layout, composition, photo editing, and brand consistency.",
-  /** Replace with your own portrait: put the file in public/ and point here. */
   portrait: "" as string, // e.g. "/portrait.jpg"
 };
 
@@ -74,11 +73,13 @@ export const socials = [
 /* -------------------------------------------------------------------------
  * EXPERIENCE
  * ---------------------------------------------------------------------- */
+
 export type Experience = {
   company: string;
   role: string;
   period: string;
   current?: boolean;
+  description: string[];
 };
 
 export const experiences: Experience[] = [
@@ -87,16 +88,37 @@ export const experiences: Experience[] = [
     role: "Graphic Designer & Video Editor",
     period: "Dec 2025 – Present",
     current: true,
+    description: [
+      "Create visual concepts, layouts, social media creatives, promotional graphics, and campaign assets.",
+      "Produce promotional videos, short-form content, and motion graphics.",
+      "Manage creative execution from concept to final delivery.",
+      "Collaborate with teams to maintain consistent visual quality.",
+      "Use AI-assisted tools in design and video workflows.",
+    ],
   },
+
   {
     company: "EESWEB",
     role: "Graphic Designer & Video Editor",
     period: "Nov 2023 – Dec 2025",
+    description: [
+      "Designed branding assets, marketing creatives, social media content, and digital communication.",
+      "Developed concepts from ideation and storyboard to final execution.",
+      "Created typography, layouts, photo compositions, motion graphics, and visual effects.",
+      "Edited promotional videos and short-form content using Premiere Pro and After Effects.",
+      "Managed multiple projects and creative variations under deadlines.",
+    ],
   },
+
   {
     company: "Disha Computer Institute",
     role: "Graphic Designer & Software Trainer",
     period: "Jun 2023 – Nov 2023",
+    description: [
+      "Designed promotional graphics, posters, layouts, and digital visuals.",
+      "Created design assets using Photoshop and Illustrator.",
+      "Trained students in graphic design software including Photoshop and Illustrator, conducting practical sessions and guiding them through project-based learning.",
+    ],
   },
 ];
 

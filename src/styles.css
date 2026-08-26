@@ -20,20 +20,21 @@
  * Until then the fallbacks below keep the same geometric character.
  * ------------------------------------------------------------------------- */
 
-/*
 @font-face {
   font-family: "MoveSans";
   src: url("/fonts/MoveSans.woff2") format("woff2");
   font-weight: 100 900;
+  font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Nexa";
   src: url("/fonts/Nexa.woff2") format("woff2");
   font-weight: 100 900;
+  font-style: normal;
   font-display: swap;
 }
-*/
 
 @theme inline {
   --font-display: "MoveSans", "Archivo", ui-sans-serif, system-ui, sans-serif;
