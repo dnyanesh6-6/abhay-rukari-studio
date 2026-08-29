@@ -21,17 +21,16 @@
  * ------------------------------------------------------------------------- */
 
 @font-face {
-  font-family: "MoveSans";
-  src: url("/fonts/MoveSans.woff2") format("woff2");
-  font-weight: 100 900;
+  font-family: "Nexa";
+  src: url("/fonts/Nexa-ExtraLight.woff2") format("woff2");
+  font-weight: 100 300;
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
   font-family: "Nexa";
-  src: url("/fonts/Nexa.woff2") format("woff2");
-  font-weight: 100 900;
+  src: url("/fonts/Nexa-Heavy.woff2") format("woff2");
+  font-weight: 700 900;
   font-style: normal;
   font-display: swap;
 }
