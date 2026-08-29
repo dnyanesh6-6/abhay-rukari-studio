@@ -89,11 +89,7 @@ export const experiences: Experience[] = [
     period: "Dec 2025 – Present",
     current: true,
     description: [
-      "Create visual concepts, layouts, social media creatives, promotional graphics, and campaign assets.",
-      "Produce promotional videos, short-form content, and motion graphics.",
-      "Manage creative execution from concept to final delivery.",
-      "Collaborate with teams to maintain consistent visual quality.",
-      "Use AI-assisted tools in design and video workflows.",
+      "Create visual concepts, layouts, social media creatives, promotional graphics, and campaign assets. Produce promotional videos, short-form content, and motion graphics. Manage creative execution from concept to final delivery. Collaborate with teams to maintain consistent visual quality. Use AI-assisted tools in design and video workflows.",
     ],
   },
 
@@ -102,11 +98,7 @@ export const experiences: Experience[] = [
     role: "Graphic Designer & Video Editor",
     period: "Nov 2023 – Dec 2025",
     description: [
-      "Designed branding assets, marketing creatives, social media content, and digital communication.",
-      "Developed concepts from ideation and storyboard to final execution.",
-      "Created typography, layouts, photo compositions, motion graphics, and visual effects.",
-      "Edited promotional videos and short-form content using Premiere Pro and After Effects.",
-      "Managed multiple projects and creative variations under deadlines.",
+      "Designed branding assets, marketing creatives, social media content, and digital communication. Developed concepts from ideation and storyboard to final execution. Created typography, layouts, photo compositions, motion graphics, and visual effects. Edited promotional videos and short-form content using Premiere Pro and After Effects. Managed multiple projects and creative variations under deadlines.",
     ],
   },
 
@@ -115,9 +107,7 @@ export const experiences: Experience[] = [
     role: "Graphic Designer & Software Trainer",
     period: "Jun 2023 – Nov 2023",
     description: [
-      "Designed promotional graphics, posters, layouts, and digital visuals.",
-      "Created design assets using Photoshop and Illustrator.",
-      "Trained students in graphic design software including Photoshop and Illustrator, conducting practical sessions and guiding them through project-based learning.",
+      "Designed promotional graphics, posters, layouts, and digital visuals. Created design assets using Photoshop and Illustrator. Trained students in graphic design software including Photoshop and Illustrator, conducting practical sessions and guiding them through project-based learning.",
     ],
   },
 ];
@@ -206,6 +196,15 @@ export const categories: Category[] = [
     description: "AI-assisted video concepts from prompt to final cut.",
     workTypes: ["AI Workflows", "Video Editing", "Visual Effects"],
   },
+
+  {
+    slug: "informative",
+    title: "INFORMATIVE",
+    type: "video",
+    description: "Informative short-form videos built around clear storytelling and visual communication.",
+    workTypes: ["Video Editing", "Storytelling", "Visual Communication"],
+  },
+
   {
     slug: "motion-graphics",
     title: "MOTION GRAPHICS",
