@@ -1,4 +1,4 @@
-/**
+	/**
  * ===========================================================================
  * CENTRAL PORTFOLIO DATA
  * ---------------------------------------------------------------------------
@@ -29,8 +29,7 @@ export const identity = {
   tagline: ["DESIGNS THAT MOVE.", "STORIES THAT STAY."],
   intro:
     "I create visual experiences through design, video, and motion—combining creativity with purpose to turn ideas into impactful stories.",
-  summary:
-    "Graphic Designer and Video Editor with 3+ years of experience in visual design, branding, marketing creatives, social media, motion graphics, and video. Skilled in developing creative concepts from ideation to final execution, with strong knowledge of typography, layout, composition, photo editing, and brand consistency.",
+  summary: "Graphic Designer and Video Editor with 3+ years of experience creating visuals for brands, campaigns, social media, and digital platforms. My work spans graphic design, branding, motion graphics, photo editing, and video—giving me the flexibility to approach a project from both a design and storytelling perspective. I enjoy taking an idea from a rough concept and turning it into something clear, engaging, and visually memorable. Whether it is a brand identity, promotional creative, social media campaign, or video, I focus on finding the right balance between creativity, communication, and purpose. I believe good design should not only look good—it should make people stop, understand, and remember.",
   portrait: "" as string, // e.g. "/portrait.jpg"
 };
 

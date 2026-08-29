@@ -52,12 +52,10 @@ export function About() {
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_0.8fr]">
           <div className="space-y-6 text-sm leading-relaxed text-muted-foreground md:text-base">
-            <p className="text-foreground/90">
-              {identity.summary}
-            </p>
-
-            <p>{identity.intro}</p>
-          </div>
+  <p className="text-foreground/90">
+    {identity.summary}
+  </p>
+</div>
 
           <div>
             <p className="eyebrow">CAPABILITIES</p>

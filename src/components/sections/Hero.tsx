@@ -52,7 +52,10 @@ export function Hero({ start = true }: { start?: boolean }) {
             </p>
           </div>
 
-          <h1 className="font-display mt-6 text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.92] font-semibold">
+          <h1
+  className="mt-6 text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.92] font-bold"
+  style={{ fontFamily: '"MoveSans", sans-serif' }}
+>
             {identity.tagline.map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <span className="rise block" style={delay(0.2 + i * 0.1)}>

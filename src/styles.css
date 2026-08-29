@@ -21,23 +21,32 @@
  * ------------------------------------------------------------------------- */
 
 @font-face {
-  font-family: "Nexa";
-  src: url("/fonts/Nexa-ExtraLight.woff2") format("woff2");
-  font-weight: 100 300;
+  font-family: "MoveSans";
+  src: url("/fonts/MoveSans-Bold.otf") format("opentype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Nexa";
-  src: url("/fonts/Nexa-Heavy.woff2") format("woff2");
-  font-weight: 700 900;
+  src: url("/fonts/Nexa-Heavy.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nexa";
+  src: url("/fonts/Nexa-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
 @theme inline {
-  --font-display: "MoveSans", "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Nexa", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Nexa", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Nexa", ui-sans-serif, system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -49,11 +58,6 @@
   --color-border: var(--border);
   --color-card: var(--surface);
   --color-card-foreground: var(--foreground);
-  --color-primary: var(--accent);
-  --color-primary-foreground: var(--accent-foreground);
-  --color-muted: var(--surface);
-  --color-ring: var(--accent);
-  --color-input: var(--border);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 4px);
