@@ -120,11 +120,14 @@ export function WorkSection() {
       return null;
     });
 
-  const creativeCategoriesRef =
+    const creativeCategoriesRef =
     useRef<HTMLDivElement>(null);
 
   const videoCategoriesRef =
     useRef<HTMLDivElement>(null);
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const hasMountedRef = useRef(false);
 
   const { ref, shown } = useReveal<HTMLDivElement>();
 
@@ -172,27 +175,53 @@ export function WorkSection() {
    *
    * 2. The user returns from a category page.
    */
-  useEffect(() => {
-    if (!activeGroup) return;
+    useEffect(() => {
+    const isFirstRun = !hasMountedRef.current;
+    hasMountedRef.current = true;
+
+    const arrivingAtWork =
+      typeof window !== "undefined" &&
+      window.location.hash === "#work";
+
+    if (!activeGroup && !arrivingAtWork) return;
 
     const target =
       activeGroup === "creatives"
         ? creativeCategoriesRef.current
-        : videoCategoriesRef.current;
+        : activeGroup === "videos"
+          ? videoCategoriesRef.current
+          : sectionRef.current;
 
     if (!target) return;
 
-    requestAnimationFrame(() => {
+    const scrollToTarget = () => {
       target.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
-    });
+
+      if (arrivingAtWork) {
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname,
+        );
+      }
+    };
+
+    if (isFirstRun) {
+      const raf = requestAnimationFrame(scrollToTarget);
+      return () => cancelAnimationFrame(raf);
+    }
+
+    const timer = setTimeout(scrollToTarget, 520);
+    return () => clearTimeout(timer);
   }, [activeGroup]);
 
   return (
-    <section
+        <section
       id="work"
+      ref={sectionRef}
       className="relative bg-background"
     >
       <div className="section-shell">

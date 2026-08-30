@@ -8,7 +8,7 @@ const items = [
   { label: "WORK", id: "work" },
   { label: "TOOLS", id: "tools" },
   { label: "CONTACT", id: "contact" },
-];
+];	
 
 /** Smoothly scrolls to a section id, works from any route. */
 export function scrollToSection(id: string) {
@@ -64,10 +64,11 @@ export function FloatingNav() {
               {item.label}
             </button>
           ) : (
-            <Link
+                        <Link
               key={item.id}
               to="/"
               hash={item.id}
+              hashScrollIntoView={item.id !== "work"}
               className="shrink-0 rounded-full px-3 py-1.5 text-[11px] tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}

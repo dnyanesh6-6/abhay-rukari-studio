@@ -46,11 +46,11 @@ export function CategoryPage({
      * saved "creatives" / "videos" value and
      * automatically opens that section.
      */
-    await router.navigate({
+        await router.navigate({
       to: "/",
       hash: "work",
       resetScroll: true,
-      hashScrollIntoView: true,
+      hashScrollIntoView: false,
     });
   };
 
