@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import { NameReveal } from "@/components/NameReveal";
 import { Hero } from "@/components/sections/Hero";
-import { ClientLogos } from "@/components/sections/ClientLogos";
 import { About } from "@/components/sections/About";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { WorkSection } from "@/components/work/WorkSection";
@@ -52,8 +51,6 @@ function Home() {
 
       <main>
         <Hero start={revealed} />
-
-        <ClientLogos />
 
         <About />
 

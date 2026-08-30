@@ -33,23 +33,24 @@ export function CategoryPage({
      *
      * We now return to the Work section.
      *
-     * resetScroll: true
-     * -----------------
-     * Forget the scroll position from the
-     * category page.
+     * resetScroll: false
+     * -------------------
+     * IMPORTANT: do NOT let the router force-scroll to
+     * the top of the page. That was overriding our own
+     * scroll (WorkSection jumping to the open category
+     * grid) and landing the user back on the Hero section.
      *
-     * hashScrollIntoView: true
-     * ---------------------
-     * Go to #work.
-     *
-     * Once WorkSection mounts, it reads the
-     * saved "creatives" / "videos" value and
-     * automatically opens that section.
+     * hashScrollIntoView: false
+     * -------------------------
+     * We do NOT let the router scroll to #work either.
+     * WorkSection reads the "#work" hash on mount and
+     * positions the page itself (either at the open
+     * category grid, or the section itself).
      */
-        await router.navigate({
+    await router.navigate({
       to: "/",
       hash: "work",
-      resetScroll: true,
+      resetScroll: false,
       hashScrollIntoView: false,
     });
   };

@@ -120,13 +120,30 @@ export function WorkSection() {
       return null;
     });
 
-    const creativeCategoriesRef =
+  const creativeCategoriesRef =
     useRef<HTMLDivElement>(null);
 
   const videoCategoriesRef =
     useRef<HTMLDivElement>(null);
 
+  /*
+   * The whole Work section. Used as the scroll target
+   * when we return here with no category group open.
+   */
   const sectionRef = useRef<HTMLElement>(null);
+
+  /*
+   * Tracks whether this is the effect's first run after
+   * mount. Used to tell apart:
+   *
+   * - Arriving fresh / returning from a category page
+   *   (grid is already in its final state, nothing to
+   *   animate, so we can scroll immediately).
+   *
+   * - The user clicking CREATIVES / VIDEOS while already
+   *   on this page (the grid is about to expand, so we
+   *   must wait for that animation before scrolling).
+   */
   const hasMountedRef = useRef(false);
 
   const { ref, shown } = useReveal<HTMLDivElement>();
@@ -166,16 +183,33 @@ export function WorkSection() {
   };
 
   /*
-   * Automatically scroll to the category list
-   * whenever CREATIVES or VIDEOS becomes active.
+   * Scroll to the right place in the Work section.
    *
-   * This works both when:
+   * This single effect is the ONLY thing that scrolls
+   * within the Work section. It replaces the router's own
+   * "#work" hash-scroll (which we disable on every link
+   * that returns here) so the two never race each other.
    *
-   * 1. The user clicks CREATIVES / VIDEOS normally.
+   * It handles three cases:
    *
-   * 2. The user returns from a category page.
+   * 1. The user clicks CREATIVES / VIDEOS on this page.
+   *    -> Wait for the 500ms expand animation to finish,
+   *       THEN smooth-scroll. Scrolling at the same time
+   *       as the grid is expanding is what caused the
+   *       rough, jittery scroll.
+   *
+   * 2. The user returns from a category page with a group
+   *    already open (remembered via sessionStorage).
+   *    -> Jump straight there instantly, no animated
+   *       scroll - the category list should just already
+   *       be on screen when the page appears.
+   *
+   * 3. The user returns to "/#work" with NO group open
+   *    (e.g. clicking WORK in the nav, or "BACK TO WORK"
+   *    when nothing was previously open).
+   *    -> Jump instantly to the Work section itself.
    */
-    useEffect(() => {
+  useEffect(() => {
     const isFirstRun = !hasMountedRef.current;
     hasMountedRef.current = true;
 
@@ -183,6 +217,8 @@ export function WorkSection() {
       typeof window !== "undefined" &&
       window.location.hash === "#work";
 
+    // Nothing to do: no group open and we didn't arrive via
+    // a "#work" link/back-navigation.
     if (!activeGroup && !arrivingAtWork) return;
 
     const target =
@@ -194,12 +230,14 @@ export function WorkSection() {
 
     if (!target) return;
 
-    const scrollToTarget = () => {
+    const scrollToTarget = (behavior: ScrollBehavior) => {
       target.scrollIntoView({
-        behavior: "smooth",
+        behavior,
         block: "start",
       });
 
+      // Clear the hash so this doesn't fire again on an
+      // unrelated re-render or re-mount.
       if (arrivingAtWork) {
         window.history.replaceState(
           null,
@@ -210,16 +248,26 @@ export function WorkSection() {
     };
 
     if (isFirstRun) {
-      const raf = requestAnimationFrame(scrollToTarget);
+      // Returning to the Work section - jump instantly,
+      // no scroll animation.
+      const raf = requestAnimationFrame(() =>
+        scrollToTarget("auto"),
+      );
       return () => cancelAnimationFrame(raf);
     }
 
-    const timer = setTimeout(scrollToTarget, 520);
+    // The user just clicked CREATIVES / VIDEOS on this
+    // page - wait for the 500ms duration-500 expand
+    // transition below to finish, then smooth-scroll.
+    const timer = setTimeout(
+      () => scrollToTarget("smooth"),
+      520,
+    );
     return () => clearTimeout(timer);
   }, [activeGroup]);
 
   return (
-        <section
+    <section
       id="work"
       ref={sectionRef}
       className="relative bg-background"
