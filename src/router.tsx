@@ -12,11 +12,16 @@ export const getRouter = () => {
       queryClient,
     },
 
-    // Keep scroll restoration enabled for normal browser navigation
+    /*
+     * Keep scroll restoration enabled.
+     */
     scrollRestoration: true,
 
-    // Instant navigation between pages.
-    // We will control smooth scrolling only where we actually want it.
+    /*
+     * Route changes themselves should happen instantly.
+     *
+     * WorkSection controls its own smooth scrolling.
+     */
     scrollRestorationBehavior: "instant",
 
     defaultPreload: "intent",

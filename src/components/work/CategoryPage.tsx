@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 
-import type { Category, Project } from "@/data/portfolio";
+import type {
+  Category,
+  Project,
+} from "@/data/portfolio";
+
 import { getProjectsByCategory } from "@/data/portfolio";
 
 import { Breadcrumbs } from "@/components/work/Breadcrumbs";
@@ -14,35 +18,39 @@ export function CategoryPage({
 }: {
   category: Category;
 }) {
-  const [open, setOpen] = useState<Project | null>(null);
+  const [open, setOpen] =
+    useState<Project | null>(null);
 
-  const projects = getProjectsByCategory(category.slug);
+  const projects =
+    getProjectsByCategory(category.slug);
 
   const router = useRouter();
 
   const backToWork = async () => {
+    /*
+     * The WorkSection has already saved whether
+     * CREATIVES or VIDEOS was open.
+     *
+     * We now return to the Work section.
+     *
+     * resetScroll: true
+     * -----------------
+     * Forget the scroll position from the
+     * category page.
+     *
+     * hashScrollIntoView: true
+     * ---------------------
+     * Go to #work.
+     *
+     * Once WorkSection mounts, it reads the
+     * saved "creatives" / "videos" value and
+     * automatically opens that section.
+     */
     await router.navigate({
       to: "/",
       hash: "work",
-
-      // VERY IMPORTANT:
-      // Do not preserve the old category scroll position.
       resetScroll: true,
-
-      // Do not let the router perform another hash scroll.
-      hashScrollIntoView: false,
-    });
-
-    // Wait until the Work section is rendered.
-    requestAnimationFrame(() => {
-      const workSection = document.getElementById("work");
-
-      if (!workSection) return;
-
-      workSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      hashScrollIntoView: true,
     });
   };
 
@@ -70,6 +78,7 @@ export function CategoryPage({
 
         {/* CATEGORY HEADER */}
         <header className="mt-8 border-b border-border pb-10">
+
           <p className="eyebrow">
             {category.type === "creative"
               ? "CREATIVES"
@@ -90,6 +99,7 @@ export function CategoryPage({
               ? "PROJECT"
               : "PROJECTS"}
           </p>
+
         </header>
 
         {/* PROJECTS */}
@@ -110,6 +120,7 @@ export function CategoryPage({
 
         {/* BACK TO WORK */}
         <div className="mt-20">
+
           <button
             type="button"
             onClick={backToWork}
@@ -129,7 +140,9 @@ export function CategoryPage({
           >
             ← BACK TO WORK
           </button>
+
         </div>
+
       </div>
 
       {/* PROJECT MODAL */}

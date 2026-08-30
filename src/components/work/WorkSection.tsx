@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 
 type WorkGroupType = "creatives" | "videos" | null;
 
+const WORK_GROUP_KEY = "work-active-group";
+
 function MainWorkCard({
   title,
   subtitle,
@@ -92,10 +94,32 @@ function MainWorkCard({
 }
 
 export function WorkSection() {
+  /*
+   * IMPORTANT:
+   *
+   * If we are returning from a category page,
+   * remember which main group was previously open.
+   *
+   * Example:
+   * "creatives"
+   * "videos"
+   * null
+   */
   const [activeGroup, setActiveGroup] =
-    useState<WorkGroupType>(null);
+    useState<WorkGroupType>(() => {
+      if (typeof window === "undefined") {
+        return null;
+      }
 
-  // References to the two category sections
+      const saved = sessionStorage.getItem(WORK_GROUP_KEY);
+
+      if (saved === "creatives" || saved === "videos") {
+        return saved;
+      }
+
+      return null;
+    });
+
   const creativeCategoriesRef =
     useRef<HTMLDivElement>(null);
 
@@ -104,13 +128,50 @@ export function WorkSection() {
 
   const { ref, shown } = useReveal<HTMLDivElement>();
 
+  /*
+   * Once WorkSection has loaded, consume the saved value.
+   *
+   * This means the remembered group is only used for
+   * returning from the category page.
+   *
+   * A normal fresh visit will start collapsed.
+   */
+  useEffect(() => {
+    sessionStorage.removeItem(WORK_GROUP_KEY);
+  }, []);
+
+  /*
+   * Open / close CREATIVES or VIDEOS.
+   *
+   * We save the selected group BEFORE navigating
+   * to a category page.
+   */
   const toggleGroup = (group: WorkGroupType) => {
-    setActiveGroup((current) =>
-      current === group ? null : group,
-    );
+    const nextGroup =
+      activeGroup === group ? null : group;
+
+    setActiveGroup(nextGroup);
+
+    if (nextGroup) {
+      sessionStorage.setItem(
+        WORK_GROUP_KEY,
+        nextGroup,
+      );
+    } else {
+      sessionStorage.removeItem(WORK_GROUP_KEY);
+    }
   };
 
-  // Automatically scroll to the opened category section
+  /*
+   * Automatically scroll to the category list
+   * whenever CREATIVES or VIDEOS becomes active.
+   *
+   * This works both when:
+   *
+   * 1. The user clicks CREATIVES / VIDEOS normally.
+   *
+   * 2. The user returns from a category page.
+   */
   useEffect(() => {
     if (!activeGroup) return;
 
@@ -119,25 +180,33 @@ export function WorkSection() {
         ? creativeCategoriesRef.current
         : videoCategoriesRef.current;
 
-    target?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+    if (!target) return;
+
+    requestAnimationFrame(() => {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     });
   }, [activeGroup]);
 
   return (
-    <section id="work" className="relative bg-background">
+    <section
+      id="work"
+      className="relative bg-background"
+    >
       <div className="section-shell">
 
         <p className="eyebrow">03 — WORK</p>
 
         <h2 className="font-display mt-6 max-w-3xl text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.05] font-semibold">
           Selected work across{" "}
-          <span className="text-accent">design</span> and{" "}
+          <span className="text-accent">design</span>{" "}
+          and{" "}
           <span className="text-accent">motion</span>.
         </h2>
 
-        {/* ONLY TWO MAIN CARDS */}
+        {/* MAIN WORK CARDS */}
         <div
           ref={ref}
           className={cn(
@@ -150,7 +219,9 @@ export function WorkSection() {
             subtitle="Explore design, branding, campaigns and visual communication."
             index="01"
             active={activeGroup === "creatives"}
-            onClick={() => toggleGroup("creatives")}
+            onClick={() =>
+              toggleGroup("creatives")
+            }
           />
 
           <MainWorkCard
@@ -158,15 +229,20 @@ export function WorkSection() {
             subtitle="Explore social media reels, AI videos and motion graphics."
             index="02"
             active={activeGroup === "videos"}
-            onClick={() => toggleGroup("videos")}
+            onClick={() =>
+              toggleGroup("videos")
+            }
           />
         </div>
 
-        {/* CREATIVES */}
+        {/* ========================= */}
+        {/* CREATIVES CATEGORY SECTION */}
+        {/* ========================= */}
+
         <div
           ref={creativeCategoriesRef}
           className={cn(
-            "grid transition-all duration-500 ease-out",
+            "grid transition-[grid-template-rows,opacity,margin] duration-500 ease-out",
             activeGroup === "creatives"
               ? "mt-10 grid-rows-[1fr] opacity-100"
               : "mt-0 grid-rows-[0fr] opacity-0",
@@ -191,25 +267,29 @@ export function WorkSection() {
               </div>
             </div>
 
-            {/* CREATIVE CATEGORY CARDS */}
             <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {creativeCategories.map((category, i) => (
-                <CreativeCategoryCard
-                  key={category.slug}
-                  category={category}
-                  index={i}
-                />
-              ))}
+              {creativeCategories.map(
+                (category, i) => (
+                  <CreativeCategoryCard
+                    key={category.slug}
+                    category={category}
+                    index={i}
+                  />
+                ),
+              )}
             </div>
 
           </div>
         </div>
 
-        {/* VIDEOS */}
+        {/* ====================== */}
+        {/* VIDEOS CATEGORY SECTION */}
+        {/* ====================== */}
+
         <div
           ref={videoCategoriesRef}
           className={cn(
-            "grid transition-all duration-500 ease-out",
+            "grid transition-[grid-template-rows,opacity,margin] duration-500 ease-out",
             activeGroup === "videos"
               ? "mt-10 grid-rows-[1fr] opacity-100"
               : "mt-0 grid-rows-[0fr] opacity-0",
@@ -234,15 +314,19 @@ export function WorkSection() {
               </div>
             </div>
 
-            {/* VIDEO CATEGORY CARDS */}
             <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {videoCategories.map((category, i) => (
-                <VideoCategoryCard
-                  key={category.slug}
-                  category={category}
-                  index={i + creativeCategories.length}
-                />
-              ))}
+              {videoCategories.map(
+                (category, i) => (
+                  <VideoCategoryCard
+                    key={category.slug}
+                    category={category}
+                    index={
+                      i +
+                      creativeCategories.length
+                    }
+                  />
+                ),
+              )}
             </div>
 
           </div>
