@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { creativeCategories, videoCategories } from "@/data/portfolio";
 import {
   CreativeCategoryCard,
@@ -95,6 +95,13 @@ export function WorkSection() {
   const [activeGroup, setActiveGroup] =
     useState<WorkGroupType>(null);
 
+  // References to the two category sections
+  const creativeCategoriesRef =
+    useRef<HTMLDivElement>(null);
+
+  const videoCategoriesRef =
+    useRef<HTMLDivElement>(null);
+
   const { ref, shown } = useReveal<HTMLDivElement>();
 
   const toggleGroup = (group: WorkGroupType) => {
@@ -102,6 +109,21 @@ export function WorkSection() {
       current === group ? null : group,
     );
   };
+
+  // Automatically scroll to the opened category section
+  useEffect(() => {
+    if (!activeGroup) return;
+
+    const target =
+      activeGroup === "creatives"
+        ? creativeCategoriesRef.current
+        : videoCategoriesRef.current;
+
+    target?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [activeGroup]);
 
   return (
     <section id="work" className="relative bg-background">
@@ -142,6 +164,7 @@ export function WorkSection() {
 
         {/* CREATIVES */}
         <div
+          ref={creativeCategoriesRef}
           className={cn(
             "grid transition-all duration-500 ease-out",
             activeGroup === "creatives"
@@ -168,7 +191,7 @@ export function WorkSection() {
               </div>
             </div>
 
-            {/* 4 CARDS PER ROW */}
+            {/* CREATIVE CATEGORY CARDS */}
             <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {creativeCategories.map((category, i) => (
                 <CreativeCategoryCard
@@ -184,6 +207,7 @@ export function WorkSection() {
 
         {/* VIDEOS */}
         <div
+          ref={videoCategoriesRef}
           className={cn(
             "grid transition-all duration-500 ease-out",
             activeGroup === "videos"
@@ -210,7 +234,7 @@ export function WorkSection() {
               </div>
             </div>
 
-            {/* ALSO 4 PER ROW */}
+            {/* VIDEO CATEGORY CARDS */}
             <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {videoCategories.map((category, i) => (
                 <VideoCategoryCard

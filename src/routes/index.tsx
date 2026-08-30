@@ -37,16 +37,22 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const [revealed, setRevealed] = useState(false);
+  const [revealed, setRevealed] = useState(() => {
+    return sessionStorage.getItem("nameRevealShown") === "true";
+  });
+
+  const handleRevealDone = () => {
+    sessionStorage.setItem("nameRevealShown", "true");
+    setRevealed(true);
+  };
 
   return (
     <>
-      <NameReveal onDone={() => setRevealed(true)} />
+      {!revealed && <NameReveal onDone={handleRevealDone} />}
 
       <main>
         <Hero start={revealed} />
 
-        {/* Client logo scrolling section */}
         <ClientLogos />
 
         <About />

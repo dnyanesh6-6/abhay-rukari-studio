@@ -7,9 +7,19 @@ export const getRouter = () => {
 
   const router = createRouter({
     routeTree,
-    context: { queryClient },
+
+    context: {
+      queryClient,
+    },
+
+    // Keep scroll restoration enabled for normal browser navigation
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
+
+    // Instant navigation between pages.
+    // We will control smooth scrolling only where we actually want it.
+    scrollRestorationBehavior: "instant",
+
+    defaultPreload: "intent",
   });
 
   return router;
