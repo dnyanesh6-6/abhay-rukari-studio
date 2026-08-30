@@ -590,7 +590,7 @@ export const projects: Project[] = [
     title: "60-60 Rule",
     type: "video",
     category: "informative",
-    video: "/portfolio/videos/informative/60-60 Rule 2.mp4",
+    video: "/portfolio/videos/informative/60-60 Rule.mp4",
     featured: true,
   },
   {

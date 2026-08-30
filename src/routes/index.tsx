@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+
 import { NameReveal } from "@/components/NameReveal";
 import { Hero } from "@/components/sections/Hero";
+import { ClientLogos } from "@/components/sections/ClientLogos";
 import { About } from "@/components/sections/About";
 import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { WorkSection } from "@/components/work/WorkSection";
@@ -11,13 +13,18 @@ import { Contact } from "@/components/sections/Contact";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Abhay Rukari — Graphic Designer & Video Editor" },
+      {
+        title: "Abhay Rukari — Graphic Designer & Video Editor",
+      },
       {
         name: "description",
         content:
           "Designs that move. Stories that stay. Portfolio of Abhay Rukari — graphic design, video editing and motion graphics with 3+ years of experience.",
       },
-      { property: "og:title", content: "Abhay Rukari — Graphic Designer & Video Editor" },
+      {
+        property: "og:title",
+        content: "Abhay Rukari — Graphic Designer & Video Editor",
+      },
       {
         property: "og:description",
         content:
@@ -25,6 +32,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+
   component: Home,
 });
 
@@ -34,12 +42,21 @@ function Home() {
   return (
     <>
       <NameReveal onDone={() => setRevealed(true)} />
+
       <main>
         <Hero start={revealed} />
+
+        {/* Client logo scrolling section */}
+        <ClientLogos />
+
         <About />
+
         <ExperienceSection />
+
         <WorkSection />
+
         <Tools />
+
         <Contact />
       </main>
     </>

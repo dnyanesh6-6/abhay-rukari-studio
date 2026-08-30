@@ -232,3 +232,30 @@
     transform: none;
   }
 }
+
+/* Client logos scrolling animation */
+
+.client-logo-track {
+  animation: client-logo-scroll 35s linear infinite;
+  will-change: transform;
+}
+
+.client-logo-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes client-logo-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-logo-track {
+    animation: none;
+  }
+}

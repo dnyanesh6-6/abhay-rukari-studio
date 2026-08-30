@@ -29,8 +29,11 @@ function CardShell({
   const projects = getProjectsByCategory(category.slug);
 
   const cover = projects.find(
-    (project) => project.image || project.thumbnail,
-  );
+  (project) =>
+    project.image ||
+    project.thumbnail ||
+    project.video,
+);
 
   const coverSrc =
     cover?.image ?? cover?.thumbnail;
@@ -51,15 +54,14 @@ function CardShell({
       {/* IMAGE */}
       <div className={cn("relative w-full overflow-hidden", aspect)}>
         {category.type === "video" && cover?.video ? (
-          <video
-            src={cover.video}
-            className="size-full object-cover"
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          />
-        ) : coverSrc ? (
+  <video
+    src={cover.video}
+    className="size-full object-cover"
+    muted
+    playsInline
+    preload="metadata"
+  />
+) : coverSrc ? (
           <img
             src={coverSrc}
             alt={`${category.title} work`}
