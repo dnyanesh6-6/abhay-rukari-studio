@@ -5,19 +5,11 @@
 /*
  * ===========================================================================
  * DESIGN SYSTEM — Abhay Rukari Portfolio
- * ---------------------------------------------------------------------------
- * Everything visual (colours, fonts, shadows, motion) is defined here.
- * Components should ONLY use semantic classes like bg-background, text-accent.
  * ===========================================================================
  */
 
 /* ---------------------------------------------------------------------------
  * TYPOGRAPHY
- * The design calls for "MoveSans" (display) and "Nexa" (body).
- * Those are licensed fonts, so they are not bundled. When you have the files:
- *   1. Drop them in  public/fonts/  (e.g. MoveSans.woff2, Nexa.woff2)
- *   2. Uncomment the @font-face blocks below.
- * Until then the fallbacks below keep the same geometric character.
  * ------------------------------------------------------------------------- */
 
 @font-face {
@@ -68,22 +60,31 @@
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ---------------------------------------------------------------------------
+ * COLORS
+ * ------------------------------------------------------------------------- */
+
 :root {
   --radius: 1rem;
 
-  /* Exact palette from the brief */
-  --background: oklch(0.13 0.014 260); /* #04060A */
-  --surface: oklch(0.19 0.006 340); /* #110F11 */
-  --foreground: oklch(0.968 0.003 90); /* #F6F5F4 */
+  --background: oklch(0.13 0.014 260);
+  --surface: oklch(0.19 0.006 340);
+  --foreground: oklch(0.968 0.003 90);
   --muted-foreground: oklch(0.68 0.008 90);
-  --accent: oklch(0.66 0.207 41); /* #F65F08 */
-  --accent-soft: oklch(0.75 0.163 60); /* #FC9225 */
+
+  --accent: oklch(0.66 0.207 41);
+  --accent-soft: oklch(0.75 0.163 60);
   --accent-foreground: oklch(0.98 0.003 90);
+
   --border: oklch(1 0 0 / 10%);
 
   --glow-accent: 0 0 60px -12px oklch(0.66 0.207 41 / 45%);
   --shadow-float: 0 18px 50px -20px oklch(0 0 0 / 80%);
 }
+
+/* ---------------------------------------------------------------------------
+ * BASE
+ * ------------------------------------------------------------------------- */
 
 @layer base {
   * {
@@ -141,7 +142,8 @@
   box-shadow: var(--glow-accent);
 }
 
-/* Section shell: consistent rhythm across the whole page */
+/* Section shell */
+
 @utility section-shell {
   width: 100%;
   max-width: 84rem;
@@ -150,6 +152,8 @@
   padding-block: 7rem;
 }
 
+/* Eyebrow */
+
 @utility eyebrow {
   font-size: 0.7rem;
   letter-spacing: 0.32em;
@@ -157,7 +161,10 @@
   color: var(--muted-foreground);
 }
 
-/* Reveal-on-scroll (paired with useReveal hook) */
+/* ---------------------------------------------------------------------------
+ * REVEAL ON SCROLL
+ * ------------------------------------------------------------------------- */
+
 @utility reveal {
   opacity: 0;
   transform: translateY(24px);
@@ -171,12 +178,16 @@
   transform: none;
 }
 
-/* Hero kinetic typography */
+/* ---------------------------------------------------------------------------
+ * HERO KINETIC TYPOGRAPHY
+ * ------------------------------------------------------------------------- */
+
 @keyframes rise-in {
   from {
     opacity: 0;
     transform: translateY(110%);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -192,6 +203,7 @@
     opacity: 0;
     transform: translateY(14px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -207,6 +219,7 @@
   100% {
     transform: translate3d(0, 0, 0);
   }
+
   50% {
     transform: translate3d(0, -14px, 0);
   }
@@ -216,27 +229,41 @@
   animation: drift 9s ease-in-out infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
+/* ---------------------------------------------------------------------------
+ * CLIENT LOGOS MARQUEE
+ * ------------------------------------------------------------------------- */
+
+/*
+ * The logo viewport uses a CSS mask so logos smoothly fade
+ * into transparency at both the left and right edges.
+ */
+
+.client-logo-viewport {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 18%,
+black 82%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 
-/* Client logos scrolling animation */
-
 .client-logo-track {
-  animation: client-logo-scroll 35s linear infinite;
+  animation: client-logo-scroll 30s linear infinite;
   will-change: transform;
 }
 
@@ -253,9 +280,33 @@
     transform: translateX(-50%);
   }
 }
+/* ---------------------------------------------------------------------------
+ * REDUCED MOTION
+ * ------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  /*
+   * Stop the client logo marquee for users who prefer reduced motion.
+   */
   .client-logo-track {
     animation: none;
+    transform: translateX(0);
   }
 }
