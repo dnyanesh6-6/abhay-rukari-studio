@@ -1,7 +1,13 @@
 import { contact, socials } from "@/data/portfolio";
 import { useReveal } from "@/hooks/useReveal";
 import { cn } from "@/lib/utils";
-import { Instagram, Linkedin, MessageCircle } from "lucide-react";
+import {
+  Instagram,
+  Linkedin,
+  MessageCircle,
+  Mail,
+  Phone,
+} from "lucide-react";
 
 export function Contact() {
   const { ref, shown } = useReveal<HTMLDivElement>();
@@ -10,21 +16,25 @@ export function Contact() {
     const name = label.toLowerCase();
 
     if (name.includes("instagram")) {
-      return <Instagram size={20} strokeWidth={2} />;
+      return <Instagram size={19} strokeWidth={2} />;
     }
 
     if (name.includes("linkedin")) {
-      return <Linkedin size={20} strokeWidth={2} />;
+      return <Linkedin size={19} strokeWidth={2} />;
     }
 
     return null;
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-surface/40">
+    <section
+      id="contact"
+      className="relative overflow-hidden bg-surface/40"
+    >
+      {/* Ambient glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[-30%] left-[-10%] size-[34rem] rounded-full opacity-30 blur-[130px]"
+        className="pointer-events-none absolute bottom-[-25%] left-[-10%] size-[34rem] rounded-full opacity-25 blur-[130px]"
         style={{
           background:
             "radial-gradient(circle, var(--accent) 0%, transparent 65%)",
@@ -38,73 +48,123 @@ export function Contact() {
           shown && "reveal-in",
         )}
       >
-        <h2 className="font-display mt-8 text-[clamp(2.5rem,6vw,6.5rem)] leading-[0.95] font-semibold tracking-[-0.04em]">
-          <span className="block whitespace-nowrap">
+        {/* =========================================================
+            MAIN CTA
+        ========================================================== */}
+
+        <h2 className="font-display mt-8 max-w-6xl text-[clamp(2.7rem,7vw,7rem)] leading-[0.9] font-semibold tracking-[-0.045em]">
+          <span className="block">
             LET&apos;S{" "}
             <span className="font-serif italic text-accent">
               design
             </span>
           </span>
 
-          <span className="block whitespace-nowrap">
-            incredible work together.
-          </span>
+          <span className="mt-2 block whitespace-nowrap">
+  incredible work together.
+</span>
         </h2>
 
-        <div className="mt-16 grid gap-14 lg:grid-cols-2">
-          {/* CONTACT DETAILS */}
-          <div className="space-y-8">
-            {contact.email && (
-              <div>
-                <p className="eyebrow">EMAIL</p>
+        {/* =========================================================
+            CONTACT INFORMATION
+        ========================================================== */}
 
-                <a
-                  href={`mailto:${contact.email}`}
-                  className="font-display mt-2 inline-block text-2xl transition-colors hover:text-accent md:text-3xl"
-                >
-                  {contact.email}
-                </a>
-              </div>
+        <div className="mt-20 grid gap-12 md:grid-cols-3 md:gap-8">
+          {/* EMAIL */}
+
+          <div>
+            <div className="mb-4 flex items-center gap-2">
+              <Mail
+                size={14}
+                strokeWidth={1.8}
+                className="text-muted-foreground"
+              />
+
+              <p className="eyebrow">EMAIL</p>
+            </div>
+
+            {contact.email ? (
+              <a
+                href={`mailto:${contact.email}`}
+                className="font-display block break-all text-lg transition-colors duration-300 hover:text-accent md:text-xl"
+              >
+                {contact.email}
+              </a>
+            ) : (
+              <p className="text-lg text-muted-foreground">
+                Email me
+              </p>
             )}
           </div>
 
-          {/* SOCIAL ICONS */}
-          <div className="lg:col-start-1">
-            <p className="eyebrow">SOCIAL</p>
+          {/* CALL ME */}
 
-  <div className="mt-5 flex items-center justify-start gap-4">
-              {/* Instagram + LinkedIn */}
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.url}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  aria-label={s.label}
-                  title={s.label}
-                  className="
-                    flex
-                    size-12
-                    items-center
-                    justify-center
-                    rounded-full
-                    border
-                    border-border
-                    text-foreground
-                    transition-all
-                    duration-300
-                    hover:-translate-y-1
-                    hover:border-accent
-                    hover:bg-accent
-                    hover:text-background
-                    hover:shadow-[0_0_25px_color-mix(in_oklab,var(--accent)_35%,transparent)]
-                  "
-                >
-                  {getSocialIcon(s.label)}
-                </a>
-              ))}
+          <div>
+            <div className="mb-4 flex items-center gap-2">
+              <Phone
+                size={14}
+                strokeWidth={1.8}
+                className="text-muted-foreground"
+              />
+
+              <p className="eyebrow">CALL ME</p>
+            </div>
+
+            <a
+              href={`tel:${contact.whatsapp}`}
+              className="font-display block text-xl transition-colors duration-300 hover:text-accent"
+            >
+              Book Now
+            </a>
+
+            <a
+              href={`tel:${contact.whatsapp}`}
+              className="mt-1 block text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {contact.whatsapp}
+            </a>
+          </div>
+
+          {/* SOCIAL */}
+
+          <div>
+            <p className="eyebrow mb-4">SOCIAL</p>
+
+            <div className="flex items-center gap-3">
+              {socials.map((s) => {
+                const icon = getSocialIcon(s.label);
+
+                if (!icon) return null;
+
+                return (
+                  <a
+                    key={s.label}
+                    href={s.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={s.label}
+                    title={s.label}
+                    className="
+                      flex
+                      size-11
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-accent
+                      text-accent-foreground
+                      transition-all
+                      duration-300
+                      hover:-translate-y-1
+                      hover:shadow-[0_0_28px_color-mix(in_oklab,var(--accent)_35%,transparent)]
+                    "
+                  >
+                    {icon}
+                  </a>
+                );
+              })}
 
               {/* WhatsApp */}
+
               <a
                 href={contact.whatsappUrl}
                 target="_blank"
@@ -113,37 +173,86 @@ export function Contact() {
                 title="WhatsApp"
                 className="
                   flex
-                  size-12
+                  size-11
                   items-center
                   justify-center
                   rounded-full
-                  border
-                  border-border
-                  text-foreground
+                  bg-accent
+                  text-accent-foreground
                   transition-all
                   duration-300
                   hover:-translate-y-1
-                  hover:border-accent
-                  hover:bg-accent
-                  hover:text-background
-                  hover:shadow-[0_0_25px_color-mix(in_oklab,var(--accent)_35%,transparent)]
+                  hover:shadow-[0_0_28px_color-mix(in_oklab,var(--accent)_35%,transparent)]
                 "
               >
-                <MessageCircle size={20} strokeWidth={2} />
+                <MessageCircle size={19} strokeWidth={2} />
               </a>
             </div>
           </div>
         </div>
 
-        <footer className="mt-24 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-8">
-          <p className="eyebrow">
-            ABHAY RUKARI — GRAPHIC DESIGNER &amp; VIDEO EDITOR
-          </p>
+        {/* =========================================================
+            DIVIDER
+        ========================================================== */}
 
-          <p className="eyebrow">
-            © {new Date().getFullYear()}
+        <div className="mt-16 border-t border-border" />
+
+        {/* =========================================================
+            FOOTER NAVIGATION
+        ========================================================== */}
+
+        <div className="flex flex-col gap-8 py-8 md:flex-row md:items-center md:justify-between">
+          {/* Menu */}
+
+          <div className="flex items-center gap-8">
+            <span className="text-sm text-muted-foreground">
+              Menu
+            </span>
+
+            <a
+              href="#work"
+              className="text-sm font-medium transition-colors hover:text-accent"
+            >
+              Work
+            </a>
+
+            <a
+              href="#tools"
+              className="text-sm font-medium transition-colors hover:text-accent"
+            >
+              Services
+            </a>
+          </div>
+
+          {/* Copyright */}
+
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Abhay Rukari
           </p>
-        </footer>
+        </div>
+
+        {/* =========================================================
+            LARGE NAME
+        ========================================================== */}
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none -mx-2 mt-8 overflow-hidden"
+        >
+          <div
+            className="
+              font-display
+              whitespace-nowrap
+              text-[clamp(5rem,17vw,16rem)]
+              font-bold
+              leading-[0.72]
+              tracking-[-0.075em]
+              text-accent
+            "
+          >
+            ABHAY
+          </div>
+        </div>
       </div>
     </section>
   );

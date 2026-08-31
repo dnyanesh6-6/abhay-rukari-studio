@@ -57,7 +57,7 @@ export const capabilities = [
  * CONTACT — only real, supplied details. Add an email/other links here later.
  * ---------------------------------------------------------------------- */
 export const contact = {
-  email: "" as string, // add your email here to show the EMAIL block
+  email: "rukariabhay05@gmail.com",
   whatsapp: "+91 84080 66097",
   whatsappUrl: "https://wa.me/918408066097",
 };
