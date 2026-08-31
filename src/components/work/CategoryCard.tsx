@@ -10,6 +10,8 @@ import { PlaceholderVisual } from "@/components/PlaceholderVisual";
 import { useIsTouch } from "@/hooks/useReveal";
 import { cn } from "@/lib/utils";
 
+const WORK_GROUP_KEY = "work-active-group";
+
 type Props = {
   category: Category;
   index: number;
@@ -129,6 +131,12 @@ function CardShell({
 
               <Link
                 to={to}
+                onClick={() =>
+                  sessionStorage.setItem(
+                    WORK_GROUP_KEY,
+                    category.type === "creative" ? "creatives" : "videos",
+                  )
+                }
                 className="text-[11px] tracking-[0.2em] text-accent transition-transform duration-300 hover:translate-x-1"
               >
                 VIEW PROJECTS →
@@ -145,6 +153,12 @@ function CardShell({
       {!touch && (
         <Link
           to={to}
+          onClick={() =>
+            sessionStorage.setItem(
+              WORK_GROUP_KEY,
+              category.type === "creative" ? "creatives" : "videos",
+            )
+          }
           className="absolute inset-0"
           aria-label={`View ${category.title} projects`}
         >

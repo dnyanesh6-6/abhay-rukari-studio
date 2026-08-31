@@ -27,6 +27,13 @@ export function CategoryPage({
   const router = useRouter();
 
   const backToWork = async () => {
+    // Guarantee that every way of returning from a category restores
+    // the exact Work group that this category belongs to.
+    sessionStorage.setItem(
+      "work-active-group",
+      category.type === "creative" ? "creatives" : "videos",
+    );
+
     /*
      * The WorkSection has already saved whether
      * CREATIVES or VIDEOS was open.

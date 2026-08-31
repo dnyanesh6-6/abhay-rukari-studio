@@ -95,175 +95,169 @@ function MainWorkCard({
 
 export function WorkSection() {
   /*
-   * IMPORTANT:
-   *
-   * If we are returning from a category page,
-   * remember which main group was previously open.
-   *
-   * Example:
-   * "creatives"
-   * "videos"
-   * null
+   * Remember which Work group was open before entering a category page.
    */
-  const [activeGroup, setActiveGroup] =
-    useState<WorkGroupType>(() => {
-      if (typeof window === "undefined") {
-        return null;
-      }
+  const [activeGroup, setActiveGroup] = useState<WorkGroupType>(() => {
+    if (typeof window === "undefined") return null;
 
-      const saved = sessionStorage.getItem(WORK_GROUP_KEY);
+    const saved = sessionStorage.getItem(WORK_GROUP_KEY);
 
-      if (saved === "creatives" || saved === "videos") {
-        return saved;
-      }
+    return saved === "creatives" || saved === "videos"
+      ? saved
+      : null;
+  });
 
-      return null;
-    });
-
-  const creativeCategoriesRef =
-    useRef<HTMLDivElement>(null);
-
-  const videoCategoriesRef =
-    useRef<HTMLDivElement>(null);
-
-  /*
-   * The whole Work section. Used as the scroll target
-   * when we return here with no category group open.
-   */
+  const creativeCategoriesRef = useRef<HTMLDivElement>(null);
+  const videoCategoriesRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-
-  /*
-   * Tracks whether this is the effect's first run after
-   * mount. Used to tell apart:
-   *
-   * - Arriving fresh / returning from a category page
-   *   (grid is already in its final state, nothing to
-   *   animate, so we can scroll immediately).
-   *
-   * - The user clicking CREATIVES / VIDEOS while already
-   *   on this page (the grid is about to expand, so we
-   *   must wait for that animation before scrolling).
-   */
-  const hasMountedRef = useRef(false);
 
   const { ref, shown } = useReveal<HTMLDivElement>();
 
   /*
-   * Once WorkSection has loaded, consume the saved value.
-   *
-   * This means the remembered group is only used for
-   * returning from the category page.
-   *
-   * A normal fresh visit will start collapsed.
-   */
-  useEffect(() => {
-    sessionStorage.removeItem(WORK_GROUP_KEY);
-  }, []);
-
-  /*
    * Open / close CREATIVES or VIDEOS.
-   *
-   * We save the selected group BEFORE navigating
-   * to a category page.
    */
   const toggleGroup = (group: WorkGroupType) => {
-    const nextGroup =
-      activeGroup === group ? null : group;
+    const nextGroup = activeGroup === group ? null : group;
 
     setActiveGroup(nextGroup);
 
     if (nextGroup) {
-      sessionStorage.setItem(
-        WORK_GROUP_KEY,
-        nextGroup,
-      );
+      sessionStorage.setItem(WORK_GROUP_KEY, nextGroup);
     } else {
       sessionStorage.removeItem(WORK_GROUP_KEY);
     }
   };
 
   /*
-   * Scroll to the right place in the Work section.
+   * ============================================================
+   * RETURN FROM CATEGORY PAGE
+   * ============================================================
    *
-   * This single effect is the ONLY thing that scrolls
-   * within the Work section. It replaces the router's own
-   * "#work" hash-scroll (which we disable on every link
-   * that returns here) so the two never race each other.
+   * When the user does:
    *
-   * It handles three cases:
+   * Home
+   *   ↓
+   * CREATIVES
+   *   ↓
+   * CLOTHES
+   *   ↓
+   * BACK
    *
-   * 1. The user clicks CREATIVES / VIDEOS on this page.
-   *    -> Wait for the 500ms expand animation to finish,
-   *       THEN smooth-scroll. Scrolling at the same time
-   *       as the grid is expanding is what caused the
-   *       rough, jittery scroll.
+   * we instantly place the user back at the CREATIVES section.
    *
-   * 2. The user returns from a category page with a group
-   *    already open (remembered via sessionStorage).
-   *    -> Jump straight there instantly, no animated
-   *       scroll - the category list should just already
-   *       be on screen when the page appears.
-   *
-   * 3. The user returns to "/#work" with NO group open
-   *    (e.g. clicking WORK in the nav, or "BACK TO WORK"
-   *    when nothing was previously open).
-   *    -> Jump instantly to the Work section itself.
+   * There is NO smooth scrolling here.
    */
   useEffect(() => {
-    const isFirstRun = !hasMountedRef.current;
-    hasMountedRef.current = true;
+    if (typeof window === "undefined") return;
 
-    const arrivingAtWork =
-      typeof window !== "undefined" &&
-      window.location.hash === "#work";
+    const savedGroup = sessionStorage.getItem(WORK_GROUP_KEY);
 
-    // Nothing to do: no group open and we didn't arrive via
-    // a "#work" link/back-navigation.
-    if (!activeGroup && !arrivingAtWork) return;
+    const returningFromCategory =
+      savedGroup === "creatives" || savedGroup === "videos";
+
+    const hasWorkHash = window.location.hash === "#work";
+
+    if (!returningFromCategory && !hasWorkHash) {
+      return;
+    }
+
+    const target =
+      savedGroup === "creatives"
+        ? creativeCategoriesRef.current
+        : savedGroup === "videos"
+          ? videoCategoriesRef.current
+          : sectionRef.current;
+
+    if (!target) {
+      return;
+    }
+
+    /*
+     * Temporarily disable the global smooth scrolling.
+     */
+    const html = document.documentElement;
+
+    const previousScrollBehavior = html.style.scrollBehavior;
+
+    html.style.scrollBehavior = "auto";
+
+    /*
+     * Calculate the exact position of the target.
+     */
+    const top =
+      target.getBoundingClientRect().top + window.scrollY;
+
+    /*
+     * INSTANT jump.
+     */
+    window.scrollTo({
+      top,
+      left: 0,
+      behavior: "auto",
+    });
+
+    /*
+     * Restore the website's normal smooth scrolling
+     * after the instant jump has completed.
+     */
+    requestAnimationFrame(() => {
+      html.style.scrollBehavior = previousScrollBehavior;
+    });
+
+    /*
+     * We have consumed the saved return position.
+     */
+    sessionStorage.removeItem(WORK_GROUP_KEY);
+
+    /*
+     * Remove #work from the URL without triggering navigation.
+     */
+    if (hasWorkHash) {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
+    }
+  }, []);
+
+  /*
+   * ============================================================
+   * NORMAL CREATIVES / VIDEOS CLICK
+   * ============================================================
+   *
+   * This is different from returning from a category.
+   *
+   * When the user is already on Home and clicks:
+   *
+   * CREATIVES
+   *
+   * the categories expand first, then we smoothly scroll to them.
+   */
+  useEffect(() => {
+    if (!activeGroup) {
+      return;
+    }
 
     const target =
       activeGroup === "creatives"
         ? creativeCategoriesRef.current
-        : activeGroup === "videos"
-          ? videoCategoriesRef.current
-          : sectionRef.current;
+        : videoCategoriesRef.current;
 
-    if (!target) return;
-
-    const scrollToTarget = (behavior: ScrollBehavior) => {
-      target.scrollIntoView({
-        behavior,
-        block: "start",
-      });
-
-      // Clear the hash so this doesn't fire again on an
-      // unrelated re-render or re-mount.
-      if (arrivingAtWork) {
-        window.history.replaceState(
-          null,
-          "",
-          window.location.pathname,
-        );
-      }
-    };
-
-    if (isFirstRun) {
-      // Returning to the Work section - jump instantly,
-      // no scroll animation.
-      const raf = requestAnimationFrame(() =>
-        scrollToTarget("auto"),
-      );
-      return () => cancelAnimationFrame(raf);
+    if (!target) {
+      return;
     }
 
-    // The user just clicked CREATIVES / VIDEOS on this
-    // page - wait for the 500ms duration-500 expand
-    // transition below to finish, then smooth-scroll.
-    const timer = setTimeout(
-      () => scrollToTarget("smooth"),
-      520,
-    );
-    return () => clearTimeout(timer);
+    const timer = window.setTimeout(() => {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 520);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, [activeGroup]);
 
   return (
@@ -274,16 +268,26 @@ export function WorkSection() {
     >
       <div className="section-shell">
 
-        <p className="eyebrow">03 — WORK</p>
+        <p className="eyebrow">
+          03 — WORK
+        </p>
 
         <h2 className="font-display mt-6 max-w-3xl text-[clamp(1.9rem,5vw,3.6rem)] leading-[1.05] font-semibold">
           Selected work across{" "}
-          <span className="text-accent">design</span>{" "}
+          <span className="text-accent">
+            design
+          </span>{" "}
           and{" "}
-          <span className="text-accent">motion</span>.
+          <span className="text-accent">
+            motion
+          </span>
+          .
         </h2>
 
-        {/* MAIN WORK CARDS */}
+        {/* =====================================================
+            MAIN WORK CARDS
+        ====================================================== */}
+
         <div
           ref={ref}
           className={cn(
@@ -296,9 +300,7 @@ export function WorkSection() {
             subtitle="Explore design, branding, campaigns and visual communication."
             index="01"
             active={activeGroup === "creatives"}
-            onClick={() =>
-              toggleGroup("creatives")
-            }
+            onClick={() => toggleGroup("creatives")}
           />
 
           <MainWorkCard
@@ -306,15 +308,13 @@ export function WorkSection() {
             subtitle="Explore social media reels, AI videos and motion graphics."
             index="02"
             active={activeGroup === "videos"}
-            onClick={() =>
-              toggleGroup("videos")
-            }
+            onClick={() => toggleGroup("videos")}
           />
         </div>
 
-        {/* ========================= */}
-        {/* CREATIVES CATEGORY SECTION */}
-        {/* ========================= */}
+        {/* =====================================================
+            CREATIVES CATEGORY SECTION
+        ====================================================== */}
 
         <div
           ref={creativeCategoriesRef}
@@ -359,9 +359,9 @@ export function WorkSection() {
           </div>
         </div>
 
-        {/* ====================== */}
-        {/* VIDEOS CATEGORY SECTION */}
-        {/* ====================== */}
+        {/* =====================================================
+            VIDEOS CATEGORY SECTION
+        ====================================================== */}
 
         <div
           ref={videoCategoriesRef}
