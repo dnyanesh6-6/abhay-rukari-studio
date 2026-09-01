@@ -82,13 +82,7 @@ export function About() {
                 </p>
               </div>
 
-              <div>
-                <p className="font-display text-4xl">02</p>
 
-                <p className="eyebrow mt-1">
-                  CRAFT DISCIPLINES
-                </p>
-              </div>
             </div>
           </div>
         </div>
